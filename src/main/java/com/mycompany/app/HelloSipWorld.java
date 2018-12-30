@@ -121,9 +121,10 @@ public class HelloSipWorld extends SipServlet {
 
 
     /**
-     * Die <code>doRegister</code> - Methode untersucht den SPI "Contact" Header und extrahiert aus dem Header die Adresse als UIR. Diese wird dann
-     * einer Collction, in diesem Fall eine HashMap, die als Klassen-Property definiert wurde, hinzugefügt. Die Methode erstellt eine neue
-     * Response mit dem Statuscode <strong>"200 -> OK"</strong> und versendet diese.
+     * Die <code>doRegister</code> - Methode untersucht den SPI "Contact" Header und extrahiert aus dem Header die Adresse als URI. Dabei wird die Adresse zuerst
+     * in die Form SipURI type-gecastet Bei SipURI handelt es sich um ein Protokoll, welches das Protokoll @see URI erweitert. Diese wird dann
+     * einer Collection, in diesem Fall eine HashMap, die als Klassen-Property definiert wurde, hinzugefügt. Die Methode erstellt eine neue Response mit dem Statuscode
+     * <strong>"200 -> OK"</strong> und versendet diese.
      * Die <code>doRegister</code> - Methode wird von der <code>doRequest</code> Methode aufgerufen, wenn diese ein SPI REGISTER primitive empfängt.
      * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). Die Klasse SipServletRequest
      *                ist der Klasse HttpServletRequest sehr ähnlich, die für Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
