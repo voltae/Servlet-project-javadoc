@@ -80,6 +80,7 @@ public class HelloSipWorld extends SipServlet {
             outRequest.setContent(request.getContent(), request.getContentType());
         }
         outRequest.send();
+        // sessions ist Klassen Hashmap, die als Key und als value Objekte des Protokolls SipSession verwenden.
         sessions.put(request.getSession(), outRequest.getSession());
         sessions.put(outRequest.getSession(), request.getSession());
     }
@@ -139,14 +140,18 @@ public class HelloSipWorld extends SipServlet {
             IOException {
         logger.info("LOGGER: .................................:\n"
                 + request.toString());
-
+        // Extrahieren aus dem eingehenden request das Property mit Namen "contact"
         Address addr = request.getAddressHeader("Contact");
+        // Type casten der retournierten URI-Adresse in das Format SpiURI (Unterklasse von URI)
         SipURI sipUri = (SipURI) addr.getURI();
+        // Hinzufügen der URI zur KlassenHashmap Key ist der im Header gespeicherte Name, value die Adresse als URI
         registeredUsersToIp.put(sipUri.getUser(), addr);
         if (logger.isInfoEnabled()) {
             logger.info("Address registered " + addr);
         }
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen.
         SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
+        // neu erstellte Antwort wird versandt
         sipServletResponse.send();
     }
 
@@ -174,7 +179,9 @@ public class HelloSipWorld extends SipServlet {
     protected void doBye(SipServletRequest request) throws ServletException,
             IOException {
         //LOGGER
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen.
         SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
+        // neu erstellte Antwort wird versandt
         sipServletResponse.send();
     }
 }
