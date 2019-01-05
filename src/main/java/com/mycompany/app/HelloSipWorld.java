@@ -111,12 +111,24 @@ public class HelloSipWorld extends SipServlet {
         if (logger.isInfoEnabled()) {
             logger.info("LOGGER: ........................\n" + response);
         }
+        // response Objekt das Interface SipServletResponse implementiert. Die methode getSession holt sich die Session, zu der die Nachricht gehört. Dise ist hier
+        // Das Feld der Hashmap lastResponse wird mit der eingehenden Response gesetzt. Damit wird sichergestellt, daß lastRespose immer die letzte Antwort ist.
         response.getSession().setAttribute("lastResponse", response);
+        // ein neuer ServletRequet wird erstellt. dazu wir aus dem Klassenproperty "session" (Hashmap) Erläuerung siehe oben, das Attribut
+        // "lastRequest" extrahiert und typegecasted dem neu erstellten request übergeben. Die Methode getSession returniert die Session zu welcher
+        // die Nachricht, hier in dem Fall die letzte Nachricht gehört, anhand eines Integers. Damit wird aus der eingehenden response die letzte Anfrage 'lastRequest'
+        // geholt. request ist damit die letzte Anfrage
         SipServletRequest request = (SipServletRequest) sessions.get(response.getSession()).getAttribute("lastRequest");
+        // Ein neuer response wird erzeugt. Der Wert des Status (integer @see public interface SipServletResponse) des response ist dabei der Parameter
+        // der Methode createResponse. Die Methode createResponse erzeugt aus dem request eine neue response mit dem Statuscode.
         SipServletResponse resp = request.createResponse(response.getStatus());
+        // die Methode getContent retourniert den Inhalt als Java Objekt. Es hängt davon ab, welcher MIME Typ das Objekt hat.
+        // Hier wird untersucht, ob der Inhalt überhaupt exisitiert.
         if (response.getContent() != null) {
+            // falls ja wird der Content typ des neu erstellten response headers gleich wie der Content type der eingehenden response gesetzt.
             resp.setContent(response.getContent(), response.getContentType());
         }
+        // die neu erstellte response wird versandt.
         resp.send();
     }
 
@@ -149,7 +161,7 @@ public class HelloSipWorld extends SipServlet {
         if (logger.isInfoEnabled()) {
             logger.info("Address registered " + addr);
         }
-        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen.
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. D.h. jee 'Register' Message wird mit '20' -'OK' bestätigt.
         SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
         // neu erstellte Antwort wird versandt
         sipServletResponse.send();
@@ -179,7 +191,8 @@ public class HelloSipWorld extends SipServlet {
     protected void doBye(SipServletRequest request) throws ServletException,
             IOException {
         //LOGGER
-        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen.
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. Das heißt alle 'Bye'
+        // nachrichten erhalten Statuscode '200'
         SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
         // neu erstellte Antwort wird versandt
         sipServletResponse.send();
