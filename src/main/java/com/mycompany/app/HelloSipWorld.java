@@ -54,7 +54,8 @@ public class HelloSipWorld extends SipServlet {
      * Der <code>logger</code> kann zum Loggen von verschiedenen Java-Applikationen verwendet werden. Die Interface <code>LogFactory</code> stellt die Instanz zur Verfügung.
      */
     
-    //Erstellt ein Objekt zum Loggen der SIP-Sitzung     
+    //Erstellt ein Objekt zum Loggen der SIP-Sitzung
+    // Looger implementiert das Protokoll @see package org.apache.commons.logging; dieses dient
 	private static Log logger = LogFactory.getLog(HelloSipWorld.class);
     //Erstellt eine neue leere HashMap (key/value) fürs Logging der aktuellen SIP-Sitzung 
 	HashMap<SipSession, SipSession> sessions= new HashMap<SipSession, SipSession>();
