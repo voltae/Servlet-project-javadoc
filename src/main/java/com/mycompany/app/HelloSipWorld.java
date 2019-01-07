@@ -10,7 +10,7 @@
  * In diesem Beispiel kommuniziert der User Agent Server (UAS) mittels Messages
  * Er antwortet mit 200 OK auf jedes erhaltene INVITE oder BYE 
  * 
- * @author F.Kopica  <-- Name des Studenten
+ * @author Alexander Feldinger  <-- Name des Studenten
  *
  */
 package com.mycompany.app;
@@ -50,11 +50,15 @@ public class HelloSipWorld extends SipServlet {
     @Resource
     SipFactory sipFactory;
     
+    /**
+     * Der <code>logger</code> kann zum Loggen von verschiedenen Applikaitonen verwendet werden. Die Interface <code>LogFactory</code> stellt die Instanz zur Verfügung.
+     */
+    
     //Erstellt ein Objekt zum Loggen der SIP-Sitzung     
 	private static Log logger = LogFactory.getLog(HelloSipWorld.class);
-    //Erstellt eine neue leere HashMap fürs Logging der aktuellen SIP-Sitzung
+    //Erstellt eine neue leere HashMap fürs Logging der aktuellen SIP-Sitzung 
 	HashMap<SipSession, SipSession> sessions= new HashMap<SipSession, SipSession>();
-	//Erstellt eine neue leere HahsMap für die aktuelle SIP-Sitzung zum Logging der User und Addressen
+	//Erstellt eine neue leere HahsMap für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
 	  HashMap<String, Address> registeredUsersToIp = new HashMap<String, Address>();
 
 	  
@@ -92,36 +96,37 @@ public class HelloSipWorld extends SipServlet {
 	@Override
 	  protected void doInvite(SipServletRequest request) throws ServletException,
     IOException {
- // request Objekt, welches das Interface SipServletRequest implementiert. Die Methode getSession holt sich die Session, zu der die Anfrage gehört.
-// Das Feld der Hashmap lastRequest wird mit der eingehenden Request gesetzt. Damit wird sichergestellt, daß lastRequest immer die letzte Anfrage ist. 
+		// request Objekt, welches das Interface SipServletRequest implementiert. Die Methode getSession holt sich die Session, zu der die Anfrage gehört.
+		// Das Feld der Hashmap lastRequest wird mit der eingehenden Request gesetzt. Damit wird sichergestellt, daß lastRequest immer die letzte Anfrage ist. 
 		request.getSession().setAttribute("lastRequest", request);
-if(logger.isInfoEnabled()) {
-    logger.info("#################LOGGER: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
-    System.out.println("#################CONSOLE: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
-}
-//erstellt ein neues Objekt des SipServletRequest Interface für die neue SIP-Session, befüllen der "From" und "To" Header.  
-SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
+		if(logger.isInfoEnabled()) {
+			logger.info("#################LOGGER: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
+			System.out.println("#################CONSOLE: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
+		}
+		//erstellt ein neues Objekt des SipServletRequest Interface für die neue SIP-Session und befüllt den "From" und "To" Header.  
+		SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
             "INVITE", request.getFrom().getURI(), request.getTo().getURI());
-//weist dem User die SIP spezifischen Informationen (To-Header, URI zur Addressierung und dem Userteil der SipURI) zu
-String user = ((SipURI) request.getTo().getURI()).getUser();
-//Durchsucht die registrierten User und gibt die Addresse des gesuchten Users zurück, falls dieser gefunden wurde
-Address calleeAddress = registeredUsersToIp.get(user);
-//Sollte die Addresse des Users nicht gefunden werden, wird eine entsprechende Nachricht gesendet und die Anwendung wird beendet
-if(calleeAddress == null) {
-    request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
-    return;
-}
-//Weist der Request die URI (Uniform Resource Identifier) des Anfragestellers zu 
-outRequest.setRequestURI(calleeAddress.getURI());
-//Gibt den Inhalt der Anfrage als Javaobjekt zurück
-//Der Typ des Objekts hängt vom MIME Type des Inhalts ab
-if(request.getContent() != null) {
-    outRequest.setContent(request.getContent(), request.getContentType());
-}
-//dieser Request wird gesendet
-outRequest.send();
-sessions.put(request.getSession(), outRequest.getSession());
-sessions.put(outRequest.getSession(), request.getSession());
+		//weist dem User die SIP spezifischen Informationen (To-Header, URI zur Addressierung und dem Userteil der SipURI) zu
+		String user = ((SipURI) request.getTo().getURI()).getUser();
+		//Sucht die IP-Adresse des Users und speichert diese
+		Address calleeAddress = registeredUsersToIp.get(user);
+		//Sollte die Addresse des Users nicht gefunden werden, wird eine entsprechende Nachricht gesendet und die Anwendung wird beendet
+		if(calleeAddress == null) {
+			request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
+			return;
+		}
+		//Weist der Request die URI (Uniform Resource Identifier) des Anfragestellers zu 
+		outRequest.setRequestURI(calleeAddress.getURI());
+		//Gibt den Inhalt der Anfrage als Javaobjekt zurück
+		//Der Typ des Objekts hängt vom MIME Type des Inhalts ab
+		if(request.getContent() != null) {
+			outRequest.setContent(request.getContent(), request.getContentType());
+		}
+		//dieser Request wird gesendet
+		outRequest.send();
+		//speichert Anfrage und Antwort
+		sessions.put(request.getSession(), outRequest.getSession());
+		sessions.put(outRequest.getSession(), request.getSession());
 }
 
 	 
