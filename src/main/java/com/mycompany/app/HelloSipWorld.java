@@ -51,14 +51,14 @@ public class HelloSipWorld extends SipServlet {
     SipFactory sipFactory;
     
     /**
-     * Der <code>logger</code> kann zum Loggen von verschiedenen Applikaitonen verwendet werden. Die Interface <code>LogFactory</code> stellt die Instanz zur Verfügung.
+     * Der <code>logger</code> kann zum Loggen von verschiedenen Java-Applikationen verwendet werden. Die Interface <code>LogFactory</code> stellt die Instanz zur Verfügung.
      */
     
     //Erstellt ein Objekt zum Loggen der SIP-Sitzung     
 	private static Log logger = LogFactory.getLog(HelloSipWorld.class);
-    //Erstellt eine neue leere HashMap fürs Logging der aktuellen SIP-Sitzung 
+    //Erstellt eine neue leere HashMap (key/value) fürs Logging der aktuellen SIP-Sitzung 
 	HashMap<SipSession, SipSession> sessions= new HashMap<SipSession, SipSession>();
-	//Erstellt eine neue leere HahsMap für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
+	//Erstellt eine neue leere HahsMap (key/value) für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
 	  HashMap<String, Address> registeredUsersToIp = new HashMap<String, Address>();
 
 	  
@@ -103,14 +103,14 @@ public class HelloSipWorld extends SipServlet {
 			logger.info("#################LOGGER: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
 			System.out.println("#################CONSOLE: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
 		}
-		//erstellt ein neues Objekt des SipServletRequest Interface für die neue SIP-Session und befüllt den "From" und "To" Header.  
+		//erstellt ein neues Objekt des SipServletRequest Interface für die neue SIP-Session und befüllt den "From" und "To" Header.
 		SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
             "INVITE", request.getFrom().getURI(), request.getTo().getURI());
 		//weist dem User die SIP spezifischen Informationen (To-Header, URI zur Addressierung und dem Userteil der SipURI) zu
 		String user = ((SipURI) request.getTo().getURI()).getUser();
 		//Sucht die IP-Adresse des Users und speichert diese
 		Address calleeAddress = registeredUsersToIp.get(user);
-		//Sollte die Addresse des Users nicht gefunden werden, wird eine entsprechende Nachricht gesendet und die Anwendung wird beendet
+		//Sollte die Addresse des Users nicht gefunden werden (Fehlermeldung "404"), wird eine entsprechende Nachricht gesendet und die Anwendung wird beendet
 		if(calleeAddress == null) {
 			request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 			return;
