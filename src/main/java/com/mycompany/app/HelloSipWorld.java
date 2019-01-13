@@ -335,19 +335,24 @@ public class HelloSipWorld extends SipServlet {
 			// es wird nur ein neuer request mit der Methode "Message erstellt"
 			 message = sipSession.createRequest("MESSAGE");
 		}
-		// falls der request noch keinen Content-Körper besitzt (in Form eines MIME typs)
+		// falls der request ein Content Object (in form eiensJava Objects) besitzt.
 		if(request.getContent() != null) {
-			// wird der Content typ des Requests verwendet.
+			// wird der Content typ des Requests verwendet, damit das Objekt auch richt erkannt werden kann.
 			String contentType = request.getContentType();
-			// Falls es diesen nicht gibt, oder dieser leer ist
+
+			// Falls es den Content Typ nicht gibt, oder dieser leer ist
 			if(contentType == null || contentType.isEmpty()) {
-				// wird ein neuer vom typ "text" erzeugt.
+				// wird ein neuer vom typ "text" erzeugt, kleinster gemeinsamer Nenner
 				contentType = "text/plain;charset=UTF-8";
 			}
 			// die message bekommt den content typ des gefundenen contents
+			// die Methode setContent hat als ersten Parameter das Content Object und als zweiten einen String mit dem Content Typ.
 			message.setContent(request.getContent(), contentType);
-				
 		}
+		// Auf der logger Ebene wird die request ausgegeben, die methode <code>toString</code>formatiert die message entsprechend.
+		logger.info("###################LOGGER: gesendete Message:\n################" + message.toString());
+		// dsa gleiche passiert auf der Ebene der Konsole, auch hier wird die message mittes der <code>toString</code>Methode formatiert ausgegeben.
+		System.out.println("###############CONSOLE: gesendete Message\n###################" + message.toString());
 		// und wird letztendlich verschickt.
 		message.send();
 	}
