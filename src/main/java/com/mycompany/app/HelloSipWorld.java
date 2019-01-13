@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Dieses SIP-ServletProjekt wurde aus folgenden Quellen <br>
  *    <br>    
  *    - Boulton, Grownovski,2009, "Understanding SIP-Servlets 1.1"<br>    
@@ -198,9 +198,10 @@ public class HelloSipWorld extends SipServlet {
       
       protected void doRegister(SipServletRequest request) throws ServletException,
       IOException {
+    	  if(logger.isInfoEnabled()) {
   		logger.info("###############LOGGER: Es wurde ein Request eines Users empfangen ##############\n" + request.toString());
   		System.out.println("##########CONSOLE: Es wurde ein Request eines Users empfangen ####################\n" + request.toString());
-             
+    	  }
   		// Extrahieren aus dem eingehenden request das Property mit Namen "contact"      
   		Address addr = request.getAddressHeader("Contact");
            // Type casten der retournierten URI-Adresse in das Format SpiURI (Unterklasse von URI)
@@ -234,8 +235,8 @@ public class HelloSipWorld extends SipServlet {
        * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
        * Fehler in einem Servlet auftritt. @see 
        * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
-	   * geworfen.
-	   */
+       * geworfen.
+       */
 
 	@Override
 	protected void doBye(SipServletRequest request) throws ServletException,
@@ -243,42 +244,41 @@ public class HelloSipWorld extends SipServlet {
 		//LOGGER
         // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. Das heißt alle 'Bye'
         // nachrichten erhalten Statuscode '200'
+		if(logger.isInfoEnabled()) {
 		logger.info("###################LOGGER: Session wird beendet:\n################" + request.toString()); 
 		System.out.println("###############CONSOLE: Session wird beendet\n###################" + request.toString());
+		}
 		SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
 		// neu erstellte Antwort wird versandt
 		sipServletResponse.send();	
 	}
 	
+	
+	/**
+     * Die <code>doAck</code> - Methode wird vom Server aufgerufen, um einen eingehenden ACK-Request des Three Way Handshakes zu bearbeiten.
+     * In diesem Fall erzeugt die Methdoe einen neue <code>Respond</code> mit Acknoledgment aufgrund eines Invite Requests. Dieses Acknoledgement wird dann versandt.
+     * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). 
+     * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
+     * Fehler in einem Servlet auftritt. @see 
+     * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
+     * geworfen.
+     */
+	
 	@Override
 	protected void doAck(SipServletRequest request) throws ServletException,
 	IOException {
-		
+		if(logger.isInfoEnabled()) {
 		logger.info("###################LOGGER: ACK wird gesendet:\n################" + request.toString()); 
 		System.out.println("###############CONSOLE: ACK wird gesendet\n###################" + request.toString());
+		}
+		//Erstellen einer neuen SipServletResponse als Antwort auf den Invite-Request. Geantwortet wird mit einem Acknoledgement um den 3 Way Handshake abzuschließen.
+		//Applikationen antworten mit einem Responsecode von 2xx und ACK nur auf Invite-Requests. 
 		SipServletResponse response = (SipServletResponse) sessions.get(request.getSession()).getAttribute("lastResponse");
 		//ACK wird erstellt und gesendet;
 		response.createAck().send();
-				
-	}
-
-	/**
-	 * Die <code>doMessage</code> Methode wird von der SPI Servlet Methode <code>doRequest</code> aufgerufen. Das SPI Primitive Message
-	 * wird für die Verwendung von Instant Nachrichten zwischen den Teilnehmern in Echtzeit verwendet. Diese Nachrichten sind normalerweise
-	 * textbasierend. Die Beschreibung liegt in <a href="https://www.ietf.org/rfc/rfc3428.txt">RFC3428</a> vor. Der RFC nennt die Art der
-	 * Message Nachricht IM "Instant Message" um den Echtzeitcharakter herauszustreichen.
-	 * Der RFC schreibt vor, die nachricht wird im Falle angekommen mit <code>200 OK</code>bestätigt. Dies signalisiert das erfolgreiche Ankommen
-	 * der NAchricht. Weiters wird ein Feld ermöglicht, das eine Gültigkeitszeitspanne <em>Expires header field</em>. Die Größe der Message ist außerhalb
-	 * einer media session wird mit 1300 bytes beschränkt.
-     * Jede neue erstellte Message wird im Klassenproperty <code>sessions</code> gespeichert, damit diese im Falle von mehreren Nachrichten wirederverwendet werden kann.
-	 * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). Die Klasse SipServletRequest
-     * ist der Klasse HttpServletRequest sehr ähnlich, die für Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
-     * auf die Header der SIP Nachricht und erlaubt eine Änderung derselben.
-	 * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-	 * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"></a>
-	 * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
-	 * geworfen.
-	 */
+		}
+	
+	
 	@Override
 	protected void doMessage(SipServletRequest request) throws ServletException,
 			IOException {
@@ -286,10 +286,12 @@ public class HelloSipWorld extends SipServlet {
 		// so wir sichergestellt, daß der aktuelle Request immer auch der letzte request ist, d.h. der lastRequest immer am aktuellen Stand bleibt.
 		request.getSession().setAttribute("lastRequest", request);
 		// Auf der logger Ebene wird der request ausgegeben, die methdoet <code>toString</code>formatiert den request entsprechend.
+		if(logger.isInfoEnabled()) {
 		logger.info("###################LOGGER: Message wird gesendet:\n################" + request.toString());
 		// dsa gleiche passiert auf der Ebene der Konsole, auch hier wird der request mittes der <code>toString</code>Methode formatiert ausgegeben.
 		System.out.println("###############CONSOLE: Message wird gesendet\n###################" + request.toString());
-		// SipSession ist ein Object das das Protokoll <SipSession> implementiert. Dieses korrespondiert mit den SPI Dialogen.
+		}
+		// SipSession ist ein Object das das Protokoll <SipSession> implementiert. Dieses korrespondiert mit deen SPI Dialogen.
 		// Die SipSession wird dem Klassen-Property <code>sessions>/code> entnommen. (Hashmap key->sessions, value->sessions)
 		// mit getSession erhält man genau jene Session, die zur aktuellen Sitzung gehört.
 		SipSession sipSession = sessions.get(request.getSession());
@@ -298,7 +300,7 @@ public class HelloSipWorld extends SipServlet {
 		SipServletRequest message = null;
 		// Falls die sipSession nicht im Property gespeichert ist, d.h. es gibt noch keine, wird eine neue erstellt.
 		if(sipSession == null) {
-			// ein SipServeltRequest "outRequest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erhält folgede Parameter:
+			// ein SipServeltRequest "outRecquest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erhält folgede Parameter:
 			// <li>SipApplicationSession: Die Methode <code>getApplicationSession</code> returniert die Applikations Session
 			// zu der die Nachricht gehört. Falls es noch keine gibt, wird eine neue erstellt. </li>
 			// <li>Method: request erhält die Methode "Primitive - Message".</li>
@@ -306,9 +308,9 @@ public class HelloSipWorld extends SipServlet {
 			// <li>URI to: es wird die Destinations URI des requestes verwendet. d.h. jene mit dem die Verbindung besteht.
 			SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
 					"MESSAGE", request.getFrom().getURI(), request.getTo().getURI());
-			// Ein String "user" wir angelegt und mit dem Usernamen der Destinations URI befüllt.
+			// Ein String "user" wir angelegt und mit dem Usernamen der Destinatins URI befüllt.
 			String user = ((SipURI) request.getTo().getURI()).getUser();
-			// Die Adresse des users wird gesucht. Dazu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
+			// Die Adresse des users wird gesucht. DAzu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
 			// und als value die zugehörige IP Adresse.
 			Address calleeAddress = registeredUsersToIp.get(user);
 			// Falls es zu dem user key (String) keine gültige IP Adresse gibt, wird eine Statusnachricht "Status code (404)" "Not found" verschickt,
@@ -317,8 +319,7 @@ public class HelloSipWorld extends SipServlet {
 				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 				return;
 			}
-			// Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP, die request URI wird zur Destinatiosn URI
-            // (d.h. Empfangsadresse)
+			// Der neuertstellte outrequest bekommt asls request URI die nun gefundene Destinations IP
 			outRequest.setRequestURI(calleeAddress.getURI());
 			// Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
 			// da message ja eine bereits bestehende Nachricht sein  könnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
@@ -327,33 +328,28 @@ public class HelloSipWorld extends SipServlet {
 			// der Property Hashmap "sessions" wird jetzt als neuer key die request-sessions gesetzt und als value die neuerstellte outRequest-session.
 			// Somit ist diese Session jederzeit durch den aktuellen request findbar.
 			sessions.put(request.getSession(), outRequest.getSession());
-			// dem Property Hashmap "session" wird das gleiche nochmal gesetzt, diesmal aber in umgekehrter Reihenfolge.
-			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outRequest gesucht werden.
+			// dem Property Hashmap "session" wird das gleiche nochmal gesetz, diesmal aber in umgekehrter Reihenfolge.
+			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outREqest gesucht werden.
 			sessions.put(outRequest.getSession(), request.getSession());
 		} else {
-			// Es gibt bereits eine SipSession im Property gespeichert.
+			// Es gibt bereits eine Message im Property gespeichert.
 			// es wird nur ein neuer request mit der Methode "Message erstellt"
 			 message = sipSession.createRequest("MESSAGE");
 		}
-		// falls der request ein Content Object (in Form eines Java Objects) besitzt.
+		// falls der request noch keinen Content-Körper besitzt ( in Form eines MIME typs)
 		if(request.getContent() != null) {
-			// wird der Content typ des Requests verwendet, damit das Objekt auch richt erkannt werden kann.
+			// wird der Content typ des Requests verwendet.
 			String contentType = request.getContentType();
-
-			// Falls es den Content Typ nicht gibt, oder dieser leer ist
+			// Falls es diesen nicht gibt, oder dieser leer ist
 			if(contentType == null || contentType.isEmpty()) {
-				// wird ein neuer vom typ "text" erzeugt, kleinster gemeinsamer Nenner
+				// wird ein neuer vom typ "text" erzeugt.
 				contentType = "text/plain;charset=UTF-8";
 			}
-			// die message bekommt den content typ des gefundenen contents
-			// die Methode setContent hat als ersten Parameter das Content Object und als zweiten einen String mit dem Content Typ.
+			// die message bekommt den content typ des gefundendne contents
 			message.setContent(request.getContent(), contentType);
+				
 		}
-		// Auf der logger Ebene wird die request ausgegeben, die methode <code>toString</code>formatiert die message entsprechend.
-		logger.info("###################LOGGER: gesendete Message:\n################" + message.toString());
-		// dsa gleiche passiert auf der Ebene der Konsole, auch hier wird die message mittes der <code>toString</code>Methode formatiert ausgegeben.
-		System.out.println("###############CONSOLE: gesendete Message\n###################" + message.toString());
-		// und wird letztendlich verschickt. Mit oder ohne Content.
+		// und wird letzedlich verschickt.
 		message.send();
 	}
 	
