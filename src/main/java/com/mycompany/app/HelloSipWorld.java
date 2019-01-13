@@ -289,7 +289,7 @@ public class HelloSipWorld extends SipServlet {
 		logger.info("###################LOGGER: Message wird gesendet:\n################" + request.toString());
 		// dsa gleiche passiert auf der Ebene der Konsole, auch hier wird der request mittes der <code>toString</code>Methode formatiert ausgegeben.
 		System.out.println("###############CONSOLE: Message wird gesendet\n###################" + request.toString());
-		// SipSession ist ein Object das das Protokoll <SipSession> implementiert. Dieses korrespondiert mit deen SPI Dialogen.
+		// SipSession ist ein Object das das Protokoll <SipSession> implementiert. Dieses korrespondiert mit den SPI Dialogen.
 		// Die SipSession wird dem Klassen-Property <code>sessions>/code> entnommen. (Hashmap key->sessions, value->sessions)
 		// mit getSession erhält man genau jene Session, die zur aktuellen Sitzung gehört.
 		SipSession sipSession = sessions.get(request.getSession());
@@ -306,9 +306,9 @@ public class HelloSipWorld extends SipServlet {
 			// <li>URI to: es wird die Destinations URI des requestes verwendet. d.h. jene mit dem die Verbindung besteht.
 			SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
 					"MESSAGE", request.getFrom().getURI(), request.getTo().getURI());
-			// Ein String "user" wir angelegt und mit dem Usernamen der Destinatins URI befüllt.
+			// Ein String "user" wir angelegt und mit dem Usernamen der Destinations URI befüllt.
 			String user = ((SipURI) request.getTo().getURI()).getUser();
-			// Die Adresse des users wird gesucht. DAzu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
+			// Die Adresse des users wird gesucht. Dazu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
 			// und als value die zugehörige IP Adresse.
 			Address calleeAddress = registeredUsersToIp.get(user);
 			// Falls es zu dem user key (String) keine gültige IP Adresse gibt, wird eine Statusnachricht "Status code (404)" "Not found" verschickt,
@@ -335,7 +335,7 @@ public class HelloSipWorld extends SipServlet {
 			// es wird nur ein neuer request mit der Methode "Message erstellt"
 			 message = sipSession.createRequest("MESSAGE");
 		}
-		// falls der request noch keinen Content-Körper besitzt ( in Form eines MIME typs)
+		// falls der request noch keinen Content-Körper besitzt (in Form eines MIME typs)
 		if(request.getContent() != null) {
 			// wird der Content typ des Requests verwendet.
 			String contentType = request.getContentType();
@@ -348,7 +348,7 @@ public class HelloSipWorld extends SipServlet {
 			message.setContent(request.getContent(), contentType);
 				
 		}
-		// und wird letzedlich verschickt.
+		// und wird letztendlich verschickt.
 		message.send();
 	}
 	
