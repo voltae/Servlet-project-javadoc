@@ -12,8 +12,9 @@
  * 
  * @author Alexander Feldinger
  * @author Valentin Platzgummer
- * @version 1.6
+ * @version 1.1
  */
+
 package com.mycompany.app;
 
 import java.io.IOException;
@@ -56,11 +57,10 @@ public class HelloSipWorld extends SipServlet {
      */
     
     //Erstellt ein Objekt zum Loggen der SIP-Sitzung
-    // Looger implementiert das Protokoll @see package org.apache.commons.logging; dieses dient
 	private static Log logger = LogFactory.getLog(HelloSipWorld.class);
-    //Erstellt eine neue leere HashMap (key/value) fürs Logging der aktuellen SIP-Sitzung 
+    //Erstellt eine neue leere HashMap (key/value) fürs Logging der aktuellen SIP-Sitzung (Sender ID)
 	HashMap<SipSession, SipSession> sessions= new HashMap<SipSession, SipSession>();
-	//Erstellt eine neue leere HahsMap (key/value) für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
+	//Erstellt eine neue leere HashMap (key/value) für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
 	  HashMap<String, Address> registeredUsersToIp = new HashMap<String, Address>();
 
 	  
@@ -70,7 +70,7 @@ public class HelloSipWorld extends SipServlet {
 	     * Der Servlet-Container kann das Servlet nicht verwenden, wenn eine ServletException ausgelöst wird, oder die <code>init</code> Methode nicht innerhalb einer vom Webserver definierten Zeit reagiert bzw zurückkehrt.
 	     * @param servletConfig Konfigurationsobjekt, welches Informationen enthält, die dem Servlet während dem Aufruf übergeben werden.
 	     * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-	     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"</a>
+	     * Fehler in einem Servlet auftritt. @see 
 	     */
 		  
 	@Override
@@ -90,7 +90,7 @@ public class HelloSipWorld extends SipServlet {
      * Die Anwendung übergibt der Methode ein "200" als Parameter, was dazu führt, dass eine SIP 200-Antwort generiert wird. Die Zahl wird andere Antworten entsprechend geändert.
      * @param request aktive Requestmessage 
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"</a>
+     * Fehler in einem Servlet auftritt. @see 
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -135,20 +135,20 @@ public class HelloSipWorld extends SipServlet {
 	/**
      * Die <code>doResponse</code> ist das Gegenstück zur <code>doRequest</code> - Methode. Genau wie diese verteilt sie eingehende SIP primitive Methoden bei eingehenden
      * Nachrichten. Diese hängen vom Status der SIP Nachrichten ab. In dem Fall setzt die Methode das Attribut der response "lastResponse" mit der aktuellen Response.
-     * <li><code>doProvisionalResponse</code> wird von der <code>doResponse</code> Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
-     * 101 und 199 liegt. (Provisional) Vorläufige Statusinformationen, dass der Server weitere Aktionen durchführt und deshalb noch keine endgültige Antwort senden kann. </li>
-     * <li><code>doSuccessResponse</code> wird von der <code>doResponse</code> Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
-     * 200 to 299. (Successful) Anfrage war erfolgreich</li>
-     * <li><code>doRedirectResponse</code> wird von der <code>doResponse</code> Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
-     * 300 to 399. (Redirection) Diese Nachrichten informieren über eine neue Kontaktadresse des Angerufenen oder über andere Dienste, die es ermöglichen die Verbindung erfolgreich aufzubauen.</li>
-     * <li><code>doErrorResponse</code> wird von der <code>doResponse</code> Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
-     * 400 to 699.(Failure) 4xx sind Request Failures, 5xx sind Server Failures und 6xx sind Global Failures</li>
-     * <li><code>doBranchResponse</code> wird für jede SPI Verzweigung einmal aufgerufen. Diese entsteht durch einen Proxy, der neue Prozesse generiert.</li>
-     * @param response aktiver Respond (Objekt implementiert das Interface @see package javax.servlet.sip) SipServletResponse ist dem
+     * <code>doProvisionalResponse</code> wird von der doResponse Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
+     * 101 und 199 liegt. (Provisional) Vorläufige Statusinformationen, dass der Server weitere Aktionen durchführt und deshalb noch keine endgültige Antwort senden kann.
+     * <code>doSuccessResponse</code> wird von der doResponse Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
+     * 200 to 299. (Successful) Anfrage war erfolgreich
+     * <code>doRedirectResponse</code> wird von der doResponse Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
+     * 300 to 399. (Redirection) Diese Nachrichten informieren über eine neue Kontaktadresse des Angerufenen oder über andere Dienste, die es ermöglichen die Verbindung erfolgreich aufzubauen.
+     * <code>doErrorResponse</code> wird von der doResponse Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
+     * 400 to 699.(Failure) 4xx sind Request Failures, 5xx sind Server Failures und 6xx sind Global Failures
+     * <code>doBranchResponse</code> wird für jede SPI Verzweigung einmal aufgerufen. Diese entsteht durch einen Proxy, der neue Prozesse generiert.
+     * @param response aktiver Respond (Objekt implementiert das Interface @see package javax.servlet.sip) SipServletResponse ist de
      * (@see HttpServletResponse) sehr verwandt, es erlaubt den Zugriff auf die SIP Header und deren Veränderung.
      * Mittels der Methode "createResponse" läßt sich ein neuer response erstellen.
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"</a>
+     * Fehler in einem Servlet auftritt. @see 
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -183,14 +183,14 @@ public class HelloSipWorld extends SipServlet {
 	 /**
 	     * Die <code>doRegister</code> - Methode untersucht den SPI "Contact" Header und extrahiert aus dem Header die Adresse als UIR. Diese wird dann
 	     * einer Collction, in diesem Fall eine HashMap, die als Klassen-Property definiert wurde, hinzugefügt. Die Methode erstellt eine neue
-	     * Response mit dem Statuscode <strong>"200 -> OK"</strong> und versendet diese.
+	     * Response mit dem Statuscode <strong>"200 OK"</strong> und versendet diese.
 	     * Die <code>doRegister</code> - Methode wird von der <code>doRequest</code> Methode aufgerufen, wenn diese ein SPI REGISTER primitive empfängt.
 	     * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). Die Klasse SipServletRequest
 	     * ist der Klasse HttpServletRequest sehr ähnlich, die für Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
 	     * auf die Header der SIP Nachricht und erlaubt eine Änderung derselben.
 	     * @throws ServletException aktiver Request (Objekt das das Interface @see package javax.servlet.sip) implementiert.
 	     * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-	     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"</a>
+	     * Fehler in einem Servlet auftritt. @see 
 	     * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
 	     * geworfen.
 	     */
@@ -223,16 +223,16 @@ public class HelloSipWorld extends SipServlet {
        * terminiert. Vergleichbar mit dem Einhängen des Telephonhörers bei analogen Verbinungen. Wichtig dabei
        * ist, der Methodencall BYE differiert vom primitiven Methodencall CANCEL. Dieser unterbricht die Verbindung
        * bevor die Verbindung endgültig zustande kam.
-       * In diesem Fall erstellt die <code>doBye</code> - Methode eine neue SipServletResponse mit dem Statuscode "200 -> OK" und versendet
+       * In diesem Fall erstellt die <code>doBye</code> - Methode eine neue SipServletResponse mit dem Statuscode "200 OK" und versendet
        * diese.
        * Die <code>doBye</code> - Methode wird von der <code>doRequest</code> Methode aufgerufen, sobald diese Methode ein SPI BY Primitive erhält,
        * wie im RFC 3261 definiert.
-       * In diesem Fall erzeugt die Methdoe einen neue <code>Respond</code> mit einem SPI Status 200 -> OK. Diese wird dann versandt.
+       * In diesem Fall erzeugt die Methdoe einen neue <code>Respond</code> mit einem SPI Status 200 OK. Diese wird dann versandt.
        * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). Die Klasse SipServletRequest
        * ist der Klasse HttpServletRequest sehr ähnlich, die für Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
        * auf die Header der SIP Nachricht und erlaubt eine Änderung derselben.
        * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-       * Fehler in einem Servlet Auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"</a>
+       * Fehler in einem Servlet auftritt. @see 
        * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
        * geworfen.
        */
@@ -249,4 +249,55 @@ public class HelloSipWorld extends SipServlet {
 		// neu erstellte Antwort wird versandt
 		sipServletResponse.send();	
 	}
+	
+	@Override
+	protected void doAck(SipServletRequest request) throws ServletException,
+	IOException {
+		
+		logger.info("###################LOGGER: ACK wird gesendet:\n################" + request.toString()); 
+		System.out.println("###############CONSOLE: ACK wird gesendet\n###################" + request.toString());
+		SipServletResponse response = (SipServletResponse) sessions.get(request.getSession()).getAttribute("lastResponse");
+		//ACK wird erstellt und gesendet;
+		response.createAck().send();
+				
+	}
+	
+	
+	@Override
+	protected void doMessage(SipServletRequest request) throws ServletException,
+			IOException {
+		request.getSession().setAttribute("lastRequest", request);
+		logger.info("###################LOGGER: Message wird gesendet:\n################" + request.toString()); 
+		System.out.println("###############CONSOLE: Message wird gesendet\n###################" + request.toString());
+		SipSession sipSession = sessions.get(request.getSession());
+		
+		SipServletRequest message = null;
+		if(sipSession == null) {
+			SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
+					"MESSAGE", request.getFrom().getURI(), request.getTo().getURI());
+			String user = ((SipURI) request.getTo().getURI()).getUser();
+			Address calleeAddress = registeredUsersToIp.get(user);
+			if(calleeAddress == null) {
+				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
+				return;
+			}
+			outRequest.setRequestURI(calleeAddress.getURI());
+			message = outRequest;
+			sessions.put(request.getSession(), outRequest.getSession());
+			sessions.put(outRequest.getSession(), request.getSession());
+		} else {
+			 message = sipSession.createRequest("MESSAGE");
+		}
+		if(request.getContent() != null) {
+			String contentType = request.getContentType();
+			if(contentType == null || contentType.isEmpty()) {
+				contentType = "text/plain;charset=UTF-8";
+			}
+			message.setContent(request.getContent(), contentType);
+				
+		}
+		
+		message.send();
+	}
+	
 }
