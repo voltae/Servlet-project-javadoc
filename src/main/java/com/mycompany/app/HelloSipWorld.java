@@ -270,7 +270,10 @@ public class HelloSipWorld extends SipServlet {
 	 * Der RFC schreibt vor, die nachricht wird im Falle angekommen mit <code>200 OK</code>bestätigt. Dies signalisiert das erfolgreiche Ankommen
 	 * der NAchricht. Weiters wird ein Feld ermöglicht, das eine Gültigkeitszeitspanne <em>Expires header field</em>. Die Größe der Message ist außerhalb
 	 * einer media session wird mit 1300 bytes beschränkt.
-	 * @param request
+     * Jede neue erstellte Message wird im Klassenproperty <code>sessions</code> gespeichert, damit diese im Falle von mehreren Nachrichten wirederverwendet werden kann.
+	 * @param request aktiver Request (Objekt implementiert Interface @see package javax.servlet.sip). Die Klasse SipServletRequest
+     * ist der Klasse HttpServletRequest sehr ähnlich, die für Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
+     * auf die Header der SIP Nachricht und erlaubt eine Änderung derselben.
 	 * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
 	 * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html"></a>
 	 * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
@@ -314,7 +317,8 @@ public class HelloSipWorld extends SipServlet {
 				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 				return;
 			}
-			// Der neuertstellte outrequest bekommt asls request URI die nun gefundene Destinations IP
+			// Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP, die rewuest URI wird zur Destinatiosn URI
+            // (d.h. Empfangsadresse)
 			outRequest.setRequestURI(calleeAddress.getURI());
 			// Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
 			// da message ja eine bereits bestehende Nachricht sein  könnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
@@ -323,8 +327,8 @@ public class HelloSipWorld extends SipServlet {
 			// der Property Hashmap "sessions" wird jetzt als neuer key die request-sessions gesetzt und als value die neuerstellte outRequest-session.
 			// Somit ist diese Session jederzeit durch den aktuellen request findbar.
 			sessions.put(request.getSession(), outRequest.getSession());
-			// dem Property Hashmap "session" wird das gleiche nochmal gesetz, diesmal aber in umgekehrter Reihenfolge.
-			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outREqest gesucht werden.
+			// dem Property Hashmap "session" wird das gleiche nochmal gesetzt, diesmal aber in umgekehrter Reihenfolge.
+			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outRequest gesucht werden.
 			sessions.put(outRequest.getSession(), request.getSession());
 		} else {
 			// Es gibt bereits eine Message im Property gespeichert.
@@ -340,7 +344,7 @@ public class HelloSipWorld extends SipServlet {
 				// wird ein neuer vom typ "text" erzeugt.
 				contentType = "text/plain;charset=UTF-8";
 			}
-			// die message bekommt den content typ des gefundendne contents
+			// die message bekommt den content typ des gefundenen contents
 			message.setContent(request.getContent(), contentType);
 				
 		}
