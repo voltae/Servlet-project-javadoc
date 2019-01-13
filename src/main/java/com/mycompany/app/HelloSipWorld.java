@@ -298,7 +298,7 @@ public class HelloSipWorld extends SipServlet {
 		SipServletRequest message = null;
 		// Falls die sipSession nicht im Property gespeichert ist, d.h. es gibt noch keine, wird eine neue erstellt.
 		if(sipSession == null) {
-			// ein SipServeltRequest "outRecquest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erhält folgede Parameter:
+			// ein SipServeltRequest "outRequest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erhält folgede Parameter:
 			// <li>SipApplicationSession: Die Methode <code>getApplicationSession</code> returniert die Applikations Session
 			// zu der die Nachricht gehört. Falls es noch keine gibt, wird eine neue erstellt. </li>
 			// <li>Method: request erhält die Methode "Primitive - Message".</li>
@@ -317,7 +317,7 @@ public class HelloSipWorld extends SipServlet {
 				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 				return;
 			}
-			// Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP, die rewuest URI wird zur Destinatiosn URI
+			// Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP, die request URI wird zur Destinatiosn URI
             // (d.h. Empfangsadresse)
 			outRequest.setRequestURI(calleeAddress.getURI());
 			// Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
@@ -331,11 +331,11 @@ public class HelloSipWorld extends SipServlet {
 			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outRequest gesucht werden.
 			sessions.put(outRequest.getSession(), request.getSession());
 		} else {
-			// Es gibt bereits eine Message im Property gespeichert.
+			// Es gibt bereits eine SipSession im Property gespeichert.
 			// es wird nur ein neuer request mit der Methode "Message erstellt"
 			 message = sipSession.createRequest("MESSAGE");
 		}
-		// falls der request ein Content Object (in form eiensJava Objects) besitzt.
+		// falls der request ein Content Object (in Form eines Java Objects) besitzt.
 		if(request.getContent() != null) {
 			// wird der Content typ des Requests verwendet, damit das Objekt auch richt erkannt werden kann.
 			String contentType = request.getContentType();
@@ -353,7 +353,7 @@ public class HelloSipWorld extends SipServlet {
 		logger.info("###################LOGGER: gesendete Message:\n################" + message.toString());
 		// dsa gleiche passiert auf der Ebene der Konsole, auch hier wird die message mittes der <code>toString</code>Methode formatiert ausgegeben.
 		System.out.println("###############CONSOLE: gesendete Message\n###################" + message.toString());
-		// und wird letztendlich verschickt.
+		// und wird letztendlich verschickt. Mit oder ohne Content.
 		message.send();
 	}
 	
