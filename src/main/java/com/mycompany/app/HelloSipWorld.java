@@ -3,7 +3,7 @@
  *    <br>    
  *    - Boulton, Grownovski,2009, "Understanding SIP-Servlets 1.1"<br>    
  *    - Zuidweg, 2015, Creating Value-Added Applications<br>    
- *    - Denuelle et al, 2011, SIP-Servlet User Guide<br>    
+ *    - Denuelle et al, 2011, SIP-Servlet User Guide<br>
  * <br>    
  * und eigene Ideen generiert:
  * <br>
@@ -264,6 +264,7 @@ public class HelloSipWorld extends SipServlet {
      * geworfen.
      */
 	
+	//Mit Input aus Github, WebSocketB2BUASipServlet.java von Jean Deruelle 
 	@Override
 	protected void doAck(SipServletRequest request) throws ServletException,
 	IOException {
@@ -278,7 +279,7 @@ public class HelloSipWorld extends SipServlet {
 		response.createAck().send();
 		}
 	
-	
+	//Mit Input aus Github, WebSocketB2BUASipServlet.java von Jean Deruelle 
 	@Override
 	protected void doMessage(SipServletRequest request) throws ServletException,
 			IOException {
