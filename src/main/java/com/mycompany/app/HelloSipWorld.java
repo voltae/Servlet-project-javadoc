@@ -319,10 +319,10 @@ public class HelloSipWorld extends SipServlet {
 				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 				return;
 			}
-			// Der neuertstellte outrequest bekommt asls request URI die nun gefundene Destinations IP
+			// Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP
 			outRequest.setRequestURI(adressIncomingCall.getURI());
 			// Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
-			// da message ja eine bereits bestehende Nachricht sein  könnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
+			// da message ja eine bereits bestehende Nachricht sein könnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
 			// outRequest fungierte als eine Art Proxy bei der Erstellung.
 			message = outRequest;
 			// der Property Hashmap "sessions" wird jetzt als neuer key die request-sessions gesetzt und als value die neuerstellte outRequest-session.
