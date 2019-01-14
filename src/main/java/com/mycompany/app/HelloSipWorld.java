@@ -308,19 +308,19 @@ public class HelloSipWorld extends SipServlet {
 			// <li>URI to: es wird die Destinations URI des requestes verwendet. d.h. jene mit dem die Verbindung besteht.
 			SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
 					"MESSAGE", request.getFrom().getURI(), request.getTo().getURI());
-			// Ein String "user" wir angelegt und mit dem Usernamen der Destinatins URI befüllt.
+			// Ein String "user" wir angelegt und mit dem Usernamen der Destinations URI befüllt, das dem aktuellen request entnommen ist.
 			String user = ((SipURI) request.getTo().getURI()).getUser();
-			// Die Adresse des users wird gesucht. DAzu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
+			// Die Adresse des users wird gesucht. Dazu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
 			// und als value die zugehörige IP Adresse.
-			Address calleeAddress = registeredUsersToIp.get(user);
+			Address adressIncomingCall = registeredUsersToIp.get(user);
 			// Falls es zu dem user key (String) keine gültige IP Adresse gibt, wird eine Statusnachricht "Status code (404)" "Not found" verschickt,
 			// und abgebrochen.
-			if(calleeAddress == null) {
+			if(adressIncomingCall == null) {
 				request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
 				return;
 			}
 			// Der neuertstellte outrequest bekommt asls request URI die nun gefundene Destinations IP
-			outRequest.setRequestURI(calleeAddress.getURI());
+			outRequest.setRequestURI(adressIncomingCall.getURI());
 			// Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
 			// da message ja eine bereits bestehende Nachricht sein  könnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
 			// outRequest fungierte als eine Art Proxy bei der Erstellung.
@@ -329,14 +329,14 @@ public class HelloSipWorld extends SipServlet {
 			// Somit ist diese Session jederzeit durch den aktuellen request findbar.
 			sessions.put(request.getSession(), outRequest.getSession());
 			// dem Property Hashmap "session" wird das gleiche nochmal gesetz, diesmal aber in umgekehrter Reihenfolge.
-			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outREqest gesucht werden.
+			// Es ist bei Hashmap wesentlich leichter nach key zu suchen, als nach value, so kann sowohl nach dem request, also auch nach dem outReqest gesucht werden.
 			sessions.put(outRequest.getSession(), request.getSession());
 		} else {
 			// Es gibt bereits eine Message im Property gespeichert.
 			// es wird nur ein neuer request mit der Methode "Message erstellt"
 			 message = sipSession.createRequest("MESSAGE");
 		}
-		// falls der request noch keinen Content-Körper besitzt ( in Form eines MIME typs)
+		// falls der request noch keinen Content-Körper besitzt (in Form eines MIME typs)
 		if(request.getContent() != null) {
 			// wird der Content typ des Requests verwendet.
 			String contentType = request.getContentType();
@@ -345,11 +345,16 @@ public class HelloSipWorld extends SipServlet {
 				// wird ein neuer vom typ "text" erzeugt.
 				contentType = "text/plain;charset=UTF-8";
 			}
-			// die message bekommt den content typ des gefundendne contents
+			// die message bekommt den content typ des gefundenden contents
 			message.setContent(request.getContent(), contentType);
 				
 		}
-		// und wird letzedlich verschickt.
+		// Testweise wird die message auf der Konsole ausgegebene.
+		if(logger.isInfoEnabled()) {
+			logger.info("###################LOGGER: Message wird gesendet:\n################" + message.toString());
+			System.out.println("###############CONSOLE: Mesage wird gesendet\n###################" + message.toString());
+		}
+		// und wird letztendlich verschickt.
 		message.send();
 	}
 	
