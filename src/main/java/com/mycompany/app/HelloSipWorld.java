@@ -289,7 +289,7 @@ public class HelloSipWorld extends SipServlet {
      * Die Nachricht erh&auml;lt automatisch den aktuellen MIME Typ, der f&uuml;r die Sitzung voreingestellt ist, falls es keinen gibt, wird ein neuer MIME Typ "Pain Text" erstellt.
      * Die Methode erstellt einen neuen Request vom Typ "MESSAGE", falls es einein derartigen Request noch nicht geben sollte. Diser wird dann f&uuml;r den weiteren Nachrichtenaustusch
      * im Rahmen der aktuellen Sitzung weiterverwendet.https://docs.oracle.com/cd/E29542_01/apirefs.1111/e17883/toc.htm?javax/servlet/sip/SipServletMessage.html
-     * Falls die eingehende Sitzung keine gültige IP Adresse lieftert, wird der Message-send Prozeß mit einer Fehlermeldung "404" beendet.
+     * Falls die eingehende Sitzung keine g&uuml;ltige IP Adresse lieftert, wird der Message-send Proze&szlig; mit einer Fehlermeldung "404" beendet.
      * @param request aktiver Request (Objekt implementiert Interface @see <a href="https://docs.oracle.com/cd/E29542_01/apirefs.1111/e17883/toc.htm?javax/servlet/sip/SipServletMessage.html">package javax.servlet.sip.)</a>
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
      * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
