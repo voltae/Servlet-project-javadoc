@@ -58,9 +58,9 @@ public class HelloSipWorld extends SipServlet {
 
     //Erstellt ein Objekt zum Loggen der SIP-Sitzung
     private static Log logger = LogFactory.getLog(HelloSipWorld.class);
-    //Erstellt eine neue leere HashMap (key/value) fürs Logging der aktuellen SIP-Sitzung (Sender ID)
+    //Erstellt eine neue leere HashMap (key/value) f&uuml;rs Logging der aktuellen SIP-Sitzung (Sender ID)
     HashMap<SipSession, SipSession> sessions= new HashMap<SipSession, SipSession>();
-    //Erstellt eine neue leere HashMap (key/value) für die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
+    //Erstellt eine neue leere HashMap (key/value) f&uuml;r die aktuelle SIP-Sitzung zum Logging der Usernamen und IP-Addressen
     HashMap<String, Address> registeredUsersToIp = new HashMap<String, Address>();
 
 
@@ -70,7 +70,7 @@ public class HelloSipWorld extends SipServlet {
      * Der Servlet-Container kann das Servlet nicht verwenden, wenn eine ServletException ausgel&ouml;st wird, oder die <code>init</code> Methode nicht innerhalb einer vom Webserver definierten Zeit reagiert bzw zur&uuml;ckkehrt.
      * @param servletConfig Konfigurationsobjekt, welches Informationen enth&auml;lt, die dem Servlet w&auml;hrend dem Aufruf &uuml;bergeben werden.
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      */
 
     @Override
@@ -90,7 +90,7 @@ public class HelloSipWorld extends SipServlet {
      * Die Anwendung &uuml;bergibt der Methode ein "200" als Parameter, was dazu f&uuml;hrt, dass eine SIP 200-Antwort generiert wird. Die Zahl wird andere Antworten entsprechend ge&auml;ndert.
      * @param request aktive Requestmessage 
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see 
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -99,13 +99,13 @@ public class HelloSipWorld extends SipServlet {
     protected void doInvite(SipServletRequest request) throws ServletException,
             IOException {
         // request Objekt, welches das Interface SipServletRequest implementiert. Die Methode getSession holt sich die Session, zu der die Anfrage geh&ouml;rt.
-        // Das Feld der Hashmap lastRequest wird mit der eingehenden Request gesetzt. Damit wird sichergestellt, daß lastRequest immer die letzte Anfrage ist.
+        // Das Feld der Hashmap lastRequest wird mit der eingehenden Request gesetzt. Damit wird sichergestellt, da&szlig; lastRequest immer die letzte Anfrage ist.
         request.getSession().setAttribute("lastRequest", request);
         if(logger.isInfoEnabled()) {
             logger.info("#################LOGGER: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
             System.out.println("#################CONSOLE: Initiiere/Update Multimedia Session\n###############" + request.getMethod());
         }
-        //erstellt ein neues Objekt des SipServletRequest Interface für die neue SIP-Session und befüllt den "From" und "To" Header.
+        //erstellt ein neues Objekt des SipServletRequest Interface f&uuml;r die neue SIP-Session und bef&uuml;llt den "From" und "To" Header.
         SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
                 "INVITE", request.getFrom().getURI(), request.getTo().getURI());
         //weist dem User die SIP spezifischen Informationen (To-Header, URI zur Addressierung und dem Userteil der SipURI) zu
@@ -119,8 +119,8 @@ public class HelloSipWorld extends SipServlet {
         }
         //Weist der Request die URI (Uniform Resource Identifier) des Anfragestellers zu
         outRequest.setRequestURI(calleeAddress.getURI());
-        //Gibt den Inhalt der Anfrage als Javaobjekt zurück
-        //Der Typ des Objekts hängt vom MIME Type des Inhalts ab
+        //Gibt den Inhalt der Anfrage als Javaobjekt zur&uuml;ck
+        //Der Typ des Objekts h&auml;ngt vom MIME Type des Inhalts ab
         if(request.getContent() != null) {
             outRequest.setContent(request.getContent(), request.getContentType());
         }
@@ -144,11 +144,11 @@ public class HelloSipWorld extends SipServlet {
      * <code>doErrorResponse</code> wird von der doResponse Methode aufgerufen, wenn der Status Code der eingehenden Antwort zwischen
      * 400 to 699.(Failure) 4xx sind Request Failures, 5xx sind Server Failures und 6xx sind Global Failures
      * <code>doBranchResponse</code> wird f&uuml;r jede SPI Verzweigung einmal aufgerufen. Diese entsteht durch einen Proxy, der neue Prozesse generiert.
-     * @param response aktiver Respond (Objekt implementiert das Interface @see package javax.servlet.sip) SipServletResponse ist de
+     * @param response aktiver Respond (Objekt implementiert das Interface @see package javax.servlet.sip) SipServletResponse ist der
      * (@see HttpServletResponse) sehr verwandt, es erlaubt den Zugriff auf die SIP Header und deren Ver&auml;nderung.
-     * Mittels der Methode "createResponse" l&auml;ßt sich ein neuer response erstellen.
+     * Mittels der Methode "createResponse" l&auml;&szlig;t sich ein neuer response erstellen.
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see 
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -157,21 +157,21 @@ public class HelloSipWorld extends SipServlet {
             throws ServletException, IOException {
         if(logger.isInfoEnabled()) {
             logger.info("###############LOGGER: Antwort wird &uuml;bermittelt\n###################" + response);
-            System.out.println("###############CONSOLE: Antwort wird übermittelt\n###################" + response);
+            System.out.println("###############CONSOLE: Antwort wird &uuml;bermittelt\n###################" + response);
         }
         // response Objekt das Interface SipServletResponse implementiert. Die methode getSession holt sich die Session, zu der die Nachricht geh&ouml;rt. Dise ist hier
-        // Das Feld der Hashmap lastResponse wird mit der eingehenden Response gesetzt. Damit wird sichergestellt, daß lastRespose immer die letzte Antwort ist.
+        // Das Feld der Hashmap lastResponse wird mit der eingehenden Response gesetzt. Damit wird sichergestellt, da&szlig; lastRespose immer die letzte Antwort ist.
         response.getSession().setAttribute("lastResponse", response);
-        // ein neuer ServletRequet wird erstellt. dazu wir aus dem Klassenproperty "session" (Hashmap) Erläuerung siehe oben, das Attribut
-        // "lastRequest" extrahiert und typegecasted dem neu erstellten request übergeben. Die Methode getSession returniert die Session zu welcher
+        // ein neuer ServletRequet wird erstellt. dazu wir aus dem Klassenproperty "session" (Hashmap) Erl&auml;uerung siehe oben, das Attribut
+        // "lastRequest" extrahiert und typegecasted dem neu erstellten request &uuml;bergeben. Die Methode getSession returniert die Session zu welcher
         // die Nachricht, hier in dem Fall die letzte Nachricht geh&ouml;rt, anhand eines Integers. Damit wird aus der eingehenden response die letzte Anfrage 'lastRequest'
         // geholt. request ist damit die letzte Anfrage
         SipServletRequest request = (SipServletRequest) sessions.get(response.getSession()).getAttribute("lastRequest");
         // Ein neuer response wird erzeugt. Der Wert des Status (integer @see public interface SipServletResponse) des response ist dabei der Parameter
         // der Methode createResponse. Die Methode createResponse erzeugt aus dem request eine neue response mit dem Statuscode.
         SipServletResponse resp = request.createResponse(response.getStatus());
-        // die Methode getContent retourniert den Inhalt als Java Objekt. Es hängt davon ab, welcher MIME Typ das Objekt hat.
-        // Hier wird untersucht, ob der Inhalt überhaupt exisitiert.
+        // die Methode getContent retourniert den Inhalt als Java Objekt. Es h&auml;ngt davon ab, welcher MIME Typ das Objekt hat.
+        // Hier wird untersucht, ob der Inhalt &uuml;berhaupt exisitiert.
         if(response.getContent() != null) {
             // falls ja wird der Content typ des neu erstellten response headers gleich wie der Content type der eingehenden response gesetzt.
             resp.setContent(response.getContent(), response.getContentType());
@@ -190,7 +190,7 @@ public class HelloSipWorld extends SipServlet {
      * auf die Header der SIP Nachricht und erlaubt eine &auml;nderung derselben.
      * @throws ServletException aktiver Request (Objekt das das Interface @see package javax.servlet.sip) implementiert.
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -205,13 +205,13 @@ public class HelloSipWorld extends SipServlet {
         Address addr = request.getAddressHeader("Contact");
         // Type casten der retournierten URI-Adresse in das Format SpiURI (Unterklasse von URI)
         SipURI sipUri = (SipURI) addr.getURI();
-        // Hinzufügen der URI zur KlassenHashmap Key ist der im Header gespeicherte Name, value die Adresse als URI
+        // Hinzuf&uuml;gen der URI zur KlassenHashmap Key ist der im Header gespeicherte Name, value die Adresse als URI
         registeredUsersToIp.put(sipUri.getUser(), addr);
         if(logger.isInfoEnabled()) {
             logger.info("################Address registered########################\n" + addr);
             System.out.println("##########CONSOLE: Addresse registriert ####################\n" + addr);
         }
-        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. D.h. jee 'Register' Message wird mit '20' -'OK' bestätigt.
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. D.h. jee 'Register' Message wird mit '20' -'OK' best&auml;tigt.
         SipServletResponse sipServletResponse = request.createResponse(SipServletResponse.SC_OK);
         // neu erstellte Antwort wird versandt
         sipServletResponse.send();
@@ -232,7 +232,7 @@ public class HelloSipWorld extends SipServlet {
      * ist der Klasse HttpServletRequest sehr &auml;hnlich, die f&uuml;r Web-Applikationen verwendet werden. Die Klasse erlaubt einen Zugriff
      * auf die Header der SIP Nachricht und erlaubt eine &auml;nderung derselben.
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -241,7 +241,7 @@ public class HelloSipWorld extends SipServlet {
     protected void doBye(SipServletRequest request) throws ServletException,
             IOException {
         //LOGGER
-        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. Das heißt alle 'Bye'
+        // Erstellen einer neuen SipServlet Response. Diese wird mit dem exit code "200 - OK" versehen. Das hei&szlig;t alle 'Bye'
         // nachrichten erhalten Statuscode '200'
         if(logger.isInfoEnabled()) {
             logger.info("###################LOGGER: Session wird beendet:\n################" + request.toString());
@@ -271,7 +271,7 @@ public class HelloSipWorld extends SipServlet {
             logger.info("###################LOGGER: ACK wird gesendet:\n################" + request.toString());
             System.out.println("###############CONSOLE: ACK wird gesendet\n###################" + request.toString());
         }
-        //Erstellen einer neuen SipServletResponse als Antwort auf den Invite-Request. Geantwortet wird mit einem Acknoledgement um den 3 Way Handshake abzuschließen.
+        //Erstellen einer neuen SipServletResponse als Antwort auf den Invite-Request. Geantwortet wird mit einem Acknoledgement um den 3 Way Handshake abzuschlie&szlig;en.
         //Applikationen antworten mit einem Responsecode von 2xx und ACK nur auf Invite-Requests.
         SipServletResponse response = (SipServletResponse) sessions.get(request.getSession()).getAttribute("lastResponse");
         //ACK wird erstellt und gesendet;
@@ -283,15 +283,16 @@ public class HelloSipWorld extends SipServlet {
     //ing a SIP MESSAGE primitive, as defined in RFC 3428 [5].
     /**
      * Die <code>doMessage</code> - Methode wird von der SIP Servlet <code>doRequest</code> Methode aufgerufen, sobald diese eine <strong>SIP MESSAGE</strong> erh&auml;lt
-     * wie im <a href="https://www.ietf.org/rfc/rfc3428.txt" RFC3428></a> definiert ist. Die Methode stellt sicher, daß der eingehende Request immer als "lastRequest" abgespeichert
+     * wie im <a href="https://www.ietf.org/rfc/rfc3428.txt"> RFC3428</a> definiert ist. Die Methode stellt sicher, da&szlig; der eingehende Request immer als "lastRequest" abgespeichert
      * bleibt. Zur Kontrolle wird eine Loggernachricht auf die Konsole ausgegeben.
      * Die Nachricht wird automatisch an den Gespr&auml;chspartner addressiert, d.h. die Methode sucht sich selbst die richtige IP Adresse, addressiert die Nachricht entsprechend.
      * Die Nachricht erh&auml;lt automatisch den aktuellen MIME Typ, der f&uuml;r die Sitzung voreingestellt ist, falls es keinen gibt, wird ein neuer MIME Typ "Pain Text" erstellt.
-     * Die Methode erstellt einen neuen Request vom Typ "MESSAGE", falls es einein derartigen Requeat noch nicht geben sollte. Diser wird dann f&uuml;r den weiteren Nachrichtenaustusch
-     * im Rahmen der aktuellen Sitzung weiterverwendet.
-     * @param request
+     * Die Methode erstellt einen neuen Request vom Typ "MESSAGE", falls es einein derartigen Request noch nicht geben sollte. Diser wird dann f&uuml;r den weiteren Nachrichtenaustusch
+     * im Rahmen der aktuellen Sitzung weiterverwendet.https://docs.oracle.com/cd/E29542_01/apirefs.1111/e17883/toc.htm?javax/servlet/sip/SipServletMessage.html
+     * Falls die eingehende Sitzung keine gültige IP Adresse lieftert, wird der Message-send Prozeß mit einer Fehlermeldung "404" beendet.
+     * @param request aktiver Request (Objekt implementiert Interface @see <a href="https://docs.oracle.com/cd/E29542_01/apirefs.1111/e17883/toc.htm?javax/servlet/sip/SipServletMessage.html">package javax.servlet.sip.)</a>
      * @throws ServletException generisches Fehlerobjekt der Klasse Exception, wird geworfen wenn ein genereller
-     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html" Servlett Exception></a>
+     * Fehler in einem Servlet auftritt. @see <a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/ServletException.html">Servlett Exception</a>
      * @throws IOException generisches Fehlerobjekt der Klasse Exceptions, wird bei einem generellen Input/ Output Fehler
      * geworfen.
      */
@@ -299,7 +300,7 @@ public class HelloSipWorld extends SipServlet {
     protected void doMessage(SipServletRequest request) throws ServletException,
             IOException {
         // das Attribut, Property "lastRequest" der aktuellen Session wird mit dem eingehendem Request als letzter Request gesetzt.
-        // so wir sichergestellt, daß der aktuelle Request immer auch der letzte Request ist, d.h. der lastRequest immer am aktuellen Stand bleibt.
+        // so wir sichergestellt, da&szlig; der aktuelle Request immer auch der letzte Request ist, d.h. der lastRequest immer am aktuellen Stand bleibt.
         request.getSession().setAttribute("lastRequest", request);
         // Auf der logger Ebene wird der Request ausgegeben, die Methode <code>toString</code>formatiert den Request entsprechend.
         if(logger.isInfoEnabled()) {
@@ -309,27 +310,27 @@ public class HelloSipWorld extends SipServlet {
         }
         // SipSession ist ein Object das das Protokoll <SipSession> implementiert. Dieses korrespondiert mit den SPI Dialogen.
         // Die SipSession wird dem Klassen-Property <code>sessions>/code> entnommen. (Hashmap key->sessions, value->sessions)
-        // mit getSession erhält man genau jene Session, die zur aktuellen Sitzung geh&ouml;rt.
+        // mit getSession erh&auml;lt man genau jene Session, die zur aktuellen Sitzung geh&ouml;rt.
         SipSession sipSession = sessions.get(request.getSession());
 
         // ein ServletRequest mit Namen "message" wird deklariert.
         SipServletRequest message = null;
         // Falls die sipSession nicht im Property gespeichert ist, d.h. es gibt noch keine, wird eine neue erstellt.
         if(sipSession == null) {
-            // ein SipServeltRequest "outRecquest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erhält folgede Parameter:
+            // ein SipServeltRequest "outRecquest" wird erstellt mittels der Methode <code>createRequest</code>. Diese erh&auml;lt folgede Parameter:
             // <li>SipApplicationSession: Die Methode <code>getApplicationSession</code> returniert die Applikations Session
             // zu der die Nachricht geh&ouml;rt. Falls es noch keine gibt, wird eine neue erstellt. </li>
-            // <li>Method: request erhält die Methode "Primitive - Message".</li>
+            // <li>Method: request erh&auml;lt die Methode "Primitive - Message".</li>
             // <li>URI from: es wird die Absender URI des requestes verwendet. d.h. die eigene.</li>
             // <li>URI to: es wird die Destinations URI des requestes verwendet. d.h. jene mit dem die Verbindung besteht.
             SipServletRequest outRequest = sipFactory.createRequest(request.getApplicationSession(),
                     "MESSAGE", request.getFrom().getURI(), request.getTo().getURI());
-            // Ein String "user" wir angelegt und mit dem Usernamen der Destinations URI befüllt, das dem aktuellen request entnommen ist.
+            // Ein String "user" wir angelegt und mit dem Usernamen der Destinations URI bef&uuml;llt, das dem aktuellen request entnommen ist.
             String user = ((SipURI) request.getTo().getURI()).getUser();
             // Die Adresse des users wird gesucht. Dazu wird das Klassenproperty "registeredUsersToIp" verwendet, das als key den String User hat
             // und als value die zugeh&ouml;rige IP Adresse.
             Address adressIncomingCall = registeredUsersToIp.get(user);
-            // Falls es zu dem user key (String) keine gültige IP Adresse gibt, wird eine Statusnachricht "Status code (404)" "Not found" verschickt,
+            // Falls es zu dem user key (String) keine g&uuml;ltige IP Adresse gibt, wird eine Statusnachricht "Status code (404)" "Not found" verschickt,
             // und abgebrochen.
             if(adressIncomingCall == null) {
                 request.createResponse(SipServletResponse.SC_NOT_FOUND).send();
@@ -338,7 +339,7 @@ public class HelloSipWorld extends SipServlet {
             // Der neuerstellte outrequest bekommt als request URI die nun gefundene Destinations IP
             outRequest.setRequestURI(adressIncomingCall.getURI());
             // Der deklarierte request "message" bekommt die Adresse des outrequests zugewiesen und zeigt damit auf dieses Objekt. wird deshalb so gemacht,
-            // da message ja eine bereits bestehende Nachricht sein k&ouml;nnte, die weiterverwendet wird. In diesem Fall mußte sie erst neu erstellt werden.
+            // da message ja eine bereits bestehende Nachricht sein k&ouml;nnte, die weiterverwendet wird. In diesem Fall mu&szlig;te sie erst neu erstellt werden.
             // outRequest fungierte als eine Art Proxy bei der Erstellung.
             message = outRequest;
             // der Property Hashmap "sessions" wird jetzt als neuer key die request-sessions gesetzt und als value die neuerstellte outRequest-session.
